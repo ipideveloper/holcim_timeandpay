@@ -514,7 +514,7 @@ Partial Class Default2
     End Sub
 
     Private Sub OpenModalPage2(ByVal VMonth As Integer, ByVal VYear As Integer, ByVal page_name As String, ByVal vheight As String, ByVal vwidth As String)
-        Session("Monght") = VMonth
+        Session("Month") = VMonth
         Session("Year") = VYear
         Dim strScript As String = "<script language=JavaScript>"
 
