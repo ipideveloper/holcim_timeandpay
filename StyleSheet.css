@@ -1,0 +1,75 @@
+﻿/* Div container to wrap the datagrid */
+div#div-datagrid {
+width: 856px;
+height: 252px;
+overflow: auto;
+scrollbar-base-color:#ffeaff;
+	margin-bottom: 0px;
+}
+
+/* Div container to wrap the datagrid */
+div#div-datagrid2 {
+width: 732px;
+height: 400px;
+overflow: auto;
+scrollbar-base-color:#ffeaff;
+}
+
+/* Div container to wrap the datagrid */
+div#div-datagrid3
+{   width: 800px;
+    height: 150px;
+    overflow: auto;
+}
+
+/* Locks the left column */
+td.locked, th.locked {
+font-size: 14px;
+font-weight: bold;
+text-align: center;
+background-color: navy;
+color: white;
+border-right: 1px solid silver;
+position:relative;
+cursor: default; 
+left: expression(document.getElementById("div-datagrid").scrollLeft-2);
+}	
+
+/* Locks table header */
+th {
+font-size: 14px;
+font-weight: bold;
+text-align: center;
+background-color: navy;
+color: white;
+border-right: 1px solid silver;
+position:relative;
+cursor: default; 
+top: expression(document.getElementById("div-datagrid").scrollTop-2); /*IE5+ only*/
+z-index: 10;
+}
+
+/* Keeps the header as the top most item. Important for top left item*/
+th.locked {z-index: 99;}
+
+/* DataGrid Item and AlternatingItem Style*/
+.GridRow {font-size: 10pt; color: black; font-family: Arial; background-color:#ffffff; height:35px;}
+.GridAltRow {font-size: 10pt; color: black; font-family: Arial; background-color:#eeeeee; height:35px;}
+
+/* Datagrid Employee Name's Align Left Added by Andrew 11-4-2011 */
+
+.AndLeft 
+{
+	text-align:left;
+}
+.AndRight
+{
+	text-align:right;
+}
+.AndCenter
+{
+	text-align:center;
+}
+
+
+

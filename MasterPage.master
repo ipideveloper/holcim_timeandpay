@@ -1,0 +1,310 @@
+<%@ Master Language="VB" CodeFile="MasterPage.master.vb" Inherits="MasterPage" %><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="cc1" %><html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Holcim</title>
+    <link href="StyleSheet.css" type="text/css" rel="stylesheet">
+    <style type="text/css">
+        BODY
+        {
+            margin: 0px;
+        }
+        .modalBackground
+        {
+            background-color: Black;
+            filter: alpha(opacity=70);
+            opacity: 0.7px;
+        }
+        .popupControl
+        {
+            background-color: Red;
+            position: absolute;
+            visibility: hidden;
+        }
+        .Buttonhand1hover
+        {
+            cursor: hand;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        function Alert() {
+            alert("Resetting of password successfully done");
+        }
+
+        function lockCol(tblID) {
+
+            var table = document.getElementById(tblID);
+            var button = document.getElementById('toggle');
+            var cTR = table.getElementsByTagName('tr');  //collection of rows
+
+            if (table.rows[0].cells[0].className == '') {
+                for (i = 0; i < cTR.length; i++) {
+                    var tr = cTR.item(i);
+                    tr.cells[0].className = 'locked';
+                }
+                button.innerText = "Unlock First Column";
+            }
+            else {
+                for (i = 0; i < cTR.length; i++) {
+                    var tr = cTR.item(i);
+                    tr.cells[0].className = '';
+                }
+                button.innerText = "Lock First Column";
+            }
+        }
+    </script>
+
+</head>
+<body style="font-size: 8pt; font-family: arial">
+    <form id="form1" runat="server">
+    <div>
+        <center>
+            <asp:ScriptManager ID="ScriptManager1" runat="server" AsyncPostBackTimeout="360000">
+            </asp:ScriptManager>
+            &nbsp;</center>
+        <center>
+            &nbsp;</center>
+        <center>
+            <table style="border-top-width: thin; border-left-width: thin; font-size: 8pt; border-left-color: silver;
+                background-position: bottom; border-bottom-width: thin; border-bottom-color: silver;
+                width: 900px; border-top-color: silver; background-repeat: repeat-x; font-family: arial;
+                height: 400px; border-right-width: thin; border-right-color: silver" cellspacing="0">
+                <tr>
+                    <td colspan="2" style="background-position: top; background-image: url(images/master_page_header.bmp);
+                        border-bottom-width: 1px; border-bottom-color: gray; vertical-align: bottom;
+                        background-repeat: no-repeat; height: 96px; text-align: right">
+                        &nbsp; &nbsp;<asp:Label ID="lblHeaderTitle" runat="server" Font-Size="11pt" ForeColor="Gray"
+                            Font-Bold="True"></asp:Label>&nbsp;<br />
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-image: url(images/Bg_Up.JPG); vertical-align: top; background-repeat: repeat-x;
+                        background-color: transparent; text-align: left" colspan="2">
+                        <table style="height: 100%" width="100%">
+                            <tr>
+                                <td style="border-top-width: 1px; background-position: left bottom; border-left-width: 1px;
+                                    border-left-color: black; background-attachment: fixed; border-bottom-width: 1px;
+                                    border-bottom-color: black; vertical-align: top; width: 145px; border-top-color: black;
+                                    background-repeat: no-repeat; height: 383px; text-align: right; border-right-width: 1px;
+                                    border-right-color: black">
+                                    <center style="background-position: right center; vertical-align: top; background-repeat: no-repeat;
+                                        text-align: left">
+                                        <asp:Button ID="btnleaveapplications" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="Leave > " UseSubmitBehavior="true"
+                                            Width="140px" Font-Bold="False" />
+                                        <asp:Button ID="btnovertime" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="Overtime / Extra Shift > " UseSubmitBehavior="true"
+                                            Width="140px" />
+                                        <asp:Button ID="btnob" runat="server" BackColor="White" BorderColor="Silver" BorderWidth="1px"
+                                            onmouseover="this.style.cursor = 'hand'" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="Travel Order > " UseSubmitBehavior="true"
+                                            Width="140px" OnClick="btnob_Click" />
+                                        <asp:Button ID="btnShiftUpload" runat="server" BackColor="White" BorderColor="Silver"
+                                            BorderWidth="1px" onmouseover="this.style.cursor = 'hand'" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="Shift Schedule Update > " UseSubmitBehavior="true"
+                                            Width="140px" />
+                                        <asp:Button ID="btntimecorrections" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="On Call > " UseSubmitBehavior="true"
+                                            Width="140px" OnClick="btntimecorrections_Click" />
+                                        <asp:Button ID="btnDTRapplication" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="DTR Application > " UseSubmitBehavior="true"
+                                            Width="140px" Font-Bold="False" />
+                                        <asp:Button ID="btnMyAppStatus" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="My Requests Status > " UseSubmitBehavior="true"
+                                            Width="140px" OnClick="btnMyAppStatus_Click" />
+                                        <asp:Button ID="btn_leave_balances" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="My Leave Balances > " UseSubmitBehavior="true"
+                                            Width="140px" OnClick="btn_leave_balances_Click" />
+                                        <asp:Button ID="btnapprovals" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="My Approvals > " UseSubmitBehavior="true"
+                                            Width="140px" OnClick="btnapprovals_Click" />
+                                        <asp:Button ID="btn_shift_approval" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="My Shift Approval > " UseSubmitBehavior="true"
+                                            Width="140px" Visible="False" />
+                                        <asp:Button ID="btn_schedules" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="My Schedules > " UseSubmitBehavior="true"
+                                            Width="140px" OnClick="btn_schedules_Click" />
+                                        <asp:Button ID="btnmydtr" runat="server" BackColor="White" BorderColor="Silver" BorderWidth="1px"
+                                            onmouseover="this.style.cursor = 'hand'" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="My DTR > " UseSubmitBehavior="true"
+                                            Width="140px" OnClick="btnmydtr_Click" />
+                                        <asp:Button ID="btnempdtr" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="My Employee's DTR > " Width="140px"
+                                            OnClick="btnempdtr_Click" Visible="False" />
+                                        <asp:Button ID="btnPayslip" runat="server" BackColor="White" BorderColor="Silver"
+                                            BorderWidth="1px" onmouseover="this.style.cursor = 'hand'" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="My Payslip > " UseSubmitBehavior="true"
+                                            Width="140px" />
+                                        <asp:Button ID="btnmypassword" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="Change My Password > " UseSubmitBehavior="true"
+                                            Width="140px" OnClick="btnmypassword_Click" />
+                                        <asp:Button ID="btnuseraccess" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="User Access > " UseSubmitBehavior="true"
+                                            Width="140px" OnClick="btnuseraccess_Click" Visible="False" />
+                                        <asp:Button ID="btn_cancel_app" runat="server" BackColor="White" BorderColor="Silver"
+                                            BorderWidth="1px" onmouseover="this.style.cursor = 'hand'" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="Cancel Application > " UseSubmitBehavior="true"
+                                            Width="140px" OnClick="btn_cancel_app_Click" Visible="False" />
+                                        &nbsp;<br />
+                                        <asp:Button ID="BtnMarker" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" TabIndex="1" Text="Marker > " UseSubmitBehavior="true"
+                                            Width="140px" Visible="false" />
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender19" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btnDTRapplication">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender1" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btnMarker">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender2" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btnleaveapplications">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender3" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btnovertime">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender4" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btnob">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender5" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btnShiftUpload">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender6" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btntimecorrections">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender7" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btnMyAppStatus">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender8" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btn_leave_balances">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender9" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btnapprovals">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender10" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btn_shift_approval">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender11" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btn_schedules">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender12" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btnmydtr">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender13" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btnempdtr">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender14" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btnPayslip">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender15" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btnmypassword">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender16" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btnuseraccess">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender17" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btn_cancel_app">
+                                        </cc1:ConfirmButtonExtender>
+                                        <cc1:ConfirmButtonExtender ID="ConfirmButtonExtender18" runat="server" ConfirmOnFormSubmit="True"
+                                            ConfirmText="Are you sure you want to leave this page?" TargetControlID="btn_cancel_app">
+                                        </cc1:ConfirmButtonExtender>
+                                        <center style="background-position: center center; vertical-align: top; background-repeat: no-repeat;
+                                            text-align: center; width: 141px; height: 18px;">
+                                            &nbsp; <a href="images/Time%20and%20Pay%20Manual%20for%20Head%20Office.pdf" title="Help">
+                                                Help</a>
+                                        </center>
+                                        <br />
+                                    </center>
+                                    <center style="background-position: right center; vertical-align: top; background-repeat: no-repeat;
+                                        text-align: left">
+                                        <asp:Button ID="btnlogout" runat="server" BackColor="White" BorderColor="Silver"
+                                            onmouseover="this.style.cursor = 'hand'" BorderWidth="1px" Font-Size="8pt" ForeColor="#696969"
+                                            Style="text-align: right" Text="Log Out > " Width="140px" UseSubmitBehavior="true" />
+                                    </center>
+                                </td>
+                                <td style="border-top-width: 1px; background-position: left bottom; border-left-width: 1px;
+                                    border-left-color: black; background-attachment: fixed; border-bottom-width: 1px;
+                                    border-bottom-color: black; vertical-align: top; border-top-color: black; background-repeat: no-repeat;
+                                    text-align: left; border-right-width: 1px; border-right-color: black">
+                                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                                    </asp:ContentPlaceHolder>
+                                </td>
+                            </tr>
+                        </table>
+                        <table style="border-top: gray 1px solid; border-left-width: 1px; border-left-color: black;
+                            border-bottom-width: 1px; border-bottom-color: black; color: #696969; background-repeat: repeat-x;
+                            height: 32px; background-color: transparent; text-align: left; border-right-width: 1px;
+                            border-right-color: black" width="100%">
+                            <tr>
+                                <td width="20%" style="border-top-width: 1px; border-left-width: 1px; border-left-color: #A9A9A9;
+                                    border-bottom-width: 1px; border-bottom-color: #A9A9A9; border-top-color: #A9A9A9;
+                                    border-right-width: 1px; border-right-color: #A9A9A9">
+                                    Personnel No. :
+                                    <asp:Label ID="Label1" runat="server"></asp:Label>
+                                </td>
+                                <td width="20%" style="border-top-width: 1px; border-left-width: 1px; border-left-color: #A9A9A9;
+                                    border-bottom-width: 1px; border-bottom-color: #A9A9A9; border-top-color: #A9A9A9;
+                                    border-right-width: 1px; border-right-color: #A9A9A9">
+                                    Last Name :&nbsp;
+                                    <asp:Label ID="Label4" runat="server"></asp:Label>
+                                </td>
+                                <td width="20%" style="border-top-width: 1px; border-left-width: 1px; border-left-color: #A9A9A9;
+                                    border-bottom-width: 1px; border-bottom-color: #A9A9A9; border-top-color: #A9A9A9;
+                                    border-right-width: 1px; border-right-color: #A9A9A9">
+                                    First Name :&nbsp;
+                                    <asp:Label ID="Label2" runat="server"></asp:Label>
+                                </td>
+                                <td width="25%" style="border-top-width: 1px; border-left-width: 1px; border-left-color: #A9A9A9;
+                                    border-bottom-width: 1px; border-bottom-color: #A9A9A9; border-top-color: #A9A9A9;
+                                    border-right-width: 1px; border-right-color: #A9A9A9">
+                                    Middle Name :
+                                    <asp:Label ID="Label3" runat="server"></asp:Label>
+                                </td>
+                                <td width="15%" style="border-top-width: 1px; border-left-width: 1px; border-left-color: #A9A9A9;
+                                    border-bottom-width: 1px; border-bottom-color: #A9A9A9; border-top-color: #A9A9A9;
+                                    border-right-width: 1px; border-right-color: #A9A9A9">
+                                    Sector Code :
+                                    <asp:Label ID="Label5" runat="server"></asp:Label>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            &nbsp;&nbsp;</center>
+        <center>
+            &nbsp;&nbsp;</center>
+        <center>
+            &nbsp;</center>
+        <center>
+            &nbsp;&nbsp;</center>
+        <center>
+            &nbsp;</center>
+    </div>
+    </form>
+</body>
+
+<script type="text/javascript">
+    //var newwindow;
+    //function ConfirmGO() {
+        //confirmed = window.confirm("You are about to leave this page. Are you sure you want to continue?");
+        //           if (confirmed) { window.alert("You clicked OK"); } else {
+        //               window.alert("You clicked Cancel");
+        //           }
+        ///return confirmed;
+    //}
+</script>
+</html>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
