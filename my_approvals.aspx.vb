@@ -2,6 +2,7 @@ Imports HolcimDbClass
 Imports System.Data
 Imports System.Data.SqlClient
 Imports cls_Email_Notifications
+Imports System.Net.Mail
 
 
 Partial Class my_approvals
@@ -206,6 +207,30 @@ Partial Class my_approvals
 
 
 #Region "Manage"
+    Private Sub SendEmail(ByVal recipient As String, ByVal body As String, ByVal SenderName As String)
+        Try
+            Dim SMPTServer As String = System.Configuration.ConfigurationManager.AppSettings("SMPTServer")
+            Dim DefURL As String = ConfigurationManager.AppSettings("DefaultURL").ToString
+            Dim HtmlBody As String
+            Dim Mailmsg As New MailMessage("Time&Pay-PHL@holcim.com", recipient)
+            Mailmsg.Subject = "Time and Pay Notice - " & SenderName
+            HtmlBody = "BodyPart<br><br><br><br>You can access this application at the intranet or through this Link:<a href=""httpaddress"">Time and Pay</a>"
+            HtmlBody = Replace(HtmlBody, "BodyPart", body)
+
+            HtmlBody = Replace(HtmlBody, "httpaddress", DefURL)
+            Mailmsg.Body = HtmlBody
+            Mailmsg.Priority = MailPriority.High
+            Mailmsg.IsBodyHtml = True
+            Dim smtpMail As New SmtpClient
+            Dim strHost As String = SMPTServer
+            smtpMail.Host = strHost
+            smtpMail.Send(Mailmsg)
+        Catch ex As Exception
+            Dim exmsg As String
+            exmsg = ex.Message.ToString
+            UserMsgBox(exmsg)
+        End Try
+    End Sub
 
     Private Sub send_notifications(ByVal ref_no As String, ByVal employee_id As String, ByVal employee_name As String, ByVal msg As String, ByVal applicant As String, ByVal apptype As String)
 
@@ -213,16 +238,20 @@ Partial Class my_approvals
         Dim body_initial As String = ""
         Dim body_final As String = ""
 
-        Dim recipients As String = "", user_email As String
+        Dim recipients As String
+        Dim user_email As String
+
         body = employee_name & " has already approved the application, please see Ref. " & ref_no & " <br><br><br><br> This is a system-generated message.  Do not reply to this message."
         ' body_initial = employee_name & " (Initial Approver) has already approved the application, please see Ref. " & ref_no & " <br><br><br><br> This is a system-generated message.  Do not reply to this message."
         body_final = employee_name & " (Initial Approver) has already approved the application, please see Ref. " & ref_no & " <br><br><br><br> This is a system-generated message.  Do not reply to this message."
         body_initial = applicant & " is applying for " & UCase(apptype) & ", please see Ref. " & ref_no & " <br><br><br><br> This is a system-generated message.  Do not reply to this message."
 
-        Dim ds As DataSet, r_level As String
+        Dim ds As DataSet
+        Dim r_level As String
 
-        r_level = ws.Get_approvers_level(employee_id, Current_User.Employee_ID)
+        Dim currentEmployeeID As String = ViewState("Employee_ID")
 
+        r_level = Get_Approvers_Level(employee_id, currentEmployeeID)
 
         If r_level = "FINAL" Then
             'Send Email to Employee
@@ -230,7 +259,7 @@ Partial Class my_approvals
             recipients = user_email
 
             'NOTE FOR TESTING: UNCOMMENT EMAIL SUMMARY NOTIFICATION AND COMMENT SENDMAIL
-            Insert_Email_Summary_Notification(recipients, body, employee_name)
+            'Insert_Email_Summary_Notification(recipients, body, employee_name)
             cls_email.SendEmail(recipients, body, employee_name)
 
         ElseIf r_level = "INITIAL" Then
@@ -238,7 +267,7 @@ Partial Class my_approvals
             'Send Email to FINAL Approver
             ds = ws.Get_Approvers_Email(employee_id, "FINAL")
 
-            Dim ds_itself As DataSet = ws.Get_Users_Email(Current_User.Employee_ID)
+            Dim ds_itself As DataSet = ws.Get_Users_Email(currentEmployeeID)
             Dim dr_itself As DataRow = ds_itself.Tables(0).Rows(0)
 
             For i As Integer = 0 To ds.Tables(0).Rows.Count - 1
@@ -246,56 +275,11 @@ Partial Class my_approvals
                 Dim dr As DataRow = ds.Tables(0).Rows(i)
                 If dr("email") <> dr_itself("email") Then
                     Insert_Email_Summary_Notification(dr("email"), body_initial, employee_name)
-                    'cls_email.SendEmail(dr("email"), body_initial, employee_name)
                 End If
             Next
 
-            ''Send Email to Employee
-            ''user_email = ws.Get_users_Email_byRefno(ref_no)
-            ''recipients = user_email
-            ''Insert_Email_Summary_Notification(recipients, body_final, employee_name) 'FOR TESTING: COMMENT FOR LIVE
-            ''cls_email.SendEmail(recipients, body_final, employee_name)
+
         End If
-
-
-        'ds = ws.Get_Approvers_Email(employee_id, "%")
-
-        'ds_itself = ws.Get_Users_Email(Current_User.Employee_ID)
-
-        'Dim dr_itself As DataRow = ds_itself.Tables(0).Rows(0)
-
-
-        'For i As Integer = 0 To ds.Tables(0).Rows.Count - 1
-        '    Dim dr As DataRow = ds.Tables(0).Rows(i)
-
-        '    If recipients = "" Then
-        '        If dr("email") <> dr_itself("email") Then
-        '            recipients = dr("email")
-        '            'Insert_Email_Summary_Notification(dr("email"), body, employee_name)
-        '        End If
-        '    Else
-        '        If dr("email") <> dr_itself("email") Then
-        '            recipients = recipients & ", " & dr("email")
-        '            'Insert_Email_Summary_Notification(dr("email"), body, employee_name)
-        '        End If
-        '    End If
-        'Next
-
-        'user_email = ws.Get_users_Email_byRefno(ref_no)
-
-        'If recipients = "" Then
-        '    recipients = user_email
-
-        'Else
-        '    recipients = recipients & ", " & user_email
-
-        'End If
-        ''   TextBox3.Text = recipients
-
-
-        'cls_email.SendEmail(recipients, body, employee_name)
-
-        'Insert_Email_Summary_Notification(recipients, body, employee_name)
 
     End Sub
 
@@ -312,14 +296,15 @@ Partial Class my_approvals
         body_initial = applicant & " is applying for " & UCase(apptype) & ", please see Ref. " & ref_no & " <br><br><br><br> This is a system-generated message.  Do not reply to this message."
 
         Dim r_level As String
+        Dim currentEmployeeID As String = ViewState("Employee_ID")
 
-        r_level = ws.Get_approvers_level(employee_id, Current_User.Employee_ID)
+        r_level = Get_Approvers_Level(employee_id, Current_User.Employee_ID)
 
         user_email = ws.Get_users_Email_byRefno(ref_no)
         recipients = user_email
 
         'NOTE FOR TESTING: UNCOMMENT EMAIL SUMMARY NOTIFICATION AND COMMENT SENDMAIL
-        Insert_Email_Summary_Notification(recipients, body, employee_name) 'FOR TESTING: COMMENT FOR LIVE
+        'Insert_Email_Summary_Notification(recipients, body, employee_name) 'FOR TESTING: COMMENT FOR LIVE
         cls_email.SendEmail(recipients, body, employee_name)
 
     End Sub
