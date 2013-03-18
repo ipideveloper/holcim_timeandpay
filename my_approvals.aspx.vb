@@ -232,6 +232,24 @@ Partial Class my_approvals
         End Try
     End Sub
 
+    Private Sub Update_Approve_Applications(ByVal ref_no As String, ByVal approver_id As String, ByVal app_type As String)
+
+        Dim sqlParam(2) As SqlParameter
+
+        sqlParam(0) = New SqlParameter("@ref_no", SqlDbType.VarChar, 15)
+        sqlParam(0).Value = ref_no
+
+        sqlParam(1) = New SqlParameter("@employee_id", SqlDbType.VarChar, 15)
+        sqlParam(1).Value = approver_id
+
+        sqlParam(2) = New SqlParameter("@app_type", SqlDbType.Char, 2)
+        sqlParam(2).Value = app_type
+
+        ExecuteDataset(ConnectionString, CommandType.StoredProcedure, _
+                                            "spWeb_Update_Approve_App", sqlParam)
+
+    End Sub
+
     Private Sub send_notifications(ByVal ref_no As String, ByVal employee_id As String, ByVal employee_name As String, ByVal msg As String, ByVal applicant As String, ByVal apptype As String)
 
         Dim body As String
@@ -253,10 +271,18 @@ Partial Class my_approvals
 
         r_level = Get_Approvers_Level(employee_id, currentEmployeeID)
 
+        If r_level = "" Then
+            SendEmail("jsd@ipiphil.com", "ERROR: NO VALUE FOR R_LEVEL='' Employee ID: " & employee_id & " Approver ID: " & currentEmployeeID, employee_name)
+        End If
+
         If r_level = "FINAL" Then
             'Send Email to Employee
             user_email = ws.Get_users_Email_byRefno(ref_no)
             recipients = user_email
+
+            If recipients = "" Then
+                SendEmail("jsd@ipiphil.com", "ERROR: NO VALUE FOR RECIPIENT='' Reference No.: " & ref_no, employee_name)
+            End If
 
             'NOTE FOR TESTING: UNCOMMENT EMAIL SUMMARY NOTIFICATION AND COMMENT SENDMAIL
             'Insert_Email_Summary_Notification(recipients, body, employee_name)
@@ -414,8 +440,11 @@ Partial Class my_approvals
                             End If
                         End If
 
-                        ws.Update_Approve_Applications(ref_no.Text, Current_User.Employee_ID, h_app_type.Value)
+                        Update_Approve_Applications(ref_no.Text, Current_User.Employee_ID, h_app_type.Value)
+
                         send_notifications(ref_no.Text, ws.Get_users_ID_byRefno(ref_no.Text), Current_User.LastName & ", " & Current_User.FirstName & " " & Current_User.Middle_Name, " has already approved", Server.HtmlDecode(GridView1.Rows(i).Cells(3).Text), GridView1.Rows(i).Cells(4).Text) 'commented for testing only by Andrew 11-13-2011
+
+
                         Approved = True
 
 

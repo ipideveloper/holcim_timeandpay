@@ -543,7 +543,7 @@ Partial Class oncall_apply
 
         If r_level = "INITIAL" Then
             ds = ws.Get_Approvers_Email(employee_id, "FINAL")
-            Dim ds_itself As DataSet = ws.Get_Users_Email(employee_id)
+            Dim ds_itself As DataSet = ws.Get_Users_Email(Current_User.Employee_ID)
             Dim dr_itself As DataRow = ds_itself.Tables(0).Rows(0)
 
             For i As Integer = 0 To ds.Tables(0).Rows.Count - 1
@@ -572,7 +572,7 @@ Partial Class oncall_apply
             End If
 
 
-            Dim ds_itself As DataSet = ws.Get_Users_Email(employee_id)
+            Dim ds_itself As DataSet = ws.Get_Users_Email(Current_User.Employee_ID)
             Dim dr_itself As DataRow = ds_itself.Tables(0).Rows(0)
 
             For i As Integer = 0 To ds.Tables(0).Rows.Count - 1
