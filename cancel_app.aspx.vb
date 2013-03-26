@@ -47,6 +47,16 @@ Partial Class cancel_app
                 Exit Sub
             End If
 
+            'DISAPPROVED
+            For i As Integer = 0 To GridView1.Rows.Count - 1
+                Dim row As GridViewRow = GridView1.Rows(i)
+                If row.Cells(7).Text = "DISAPPROVED" Then
+                    UserMsgBox("Cannot cancel Disapproved Applications!")
+                    Exit Sub
+                End If
+            Next
+
+
             If TextBox1.Text = "" Then
                 UserMsgBox("Enter Ref. No.")
                 Exit Sub
@@ -118,9 +128,16 @@ Partial Class cancel_app
 
     Protected Sub btnview_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles btn_view.Click
         
+
         btn_cancel.Enabled = False
         Label5.Visible = False
         'Try
+
+        If Left(TextBox1.Text, 2) = "91" Then
+            UserMsgBox("Cannot cancel DTR Applications!")
+            Exit Sub
+        End If
+
         If TextBox1.Text = "" Then
             UserMsgBox("Enter Ref. No.")
             Exit Sub
